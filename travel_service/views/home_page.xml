@@ -1,0 +1,13 @@
+<odoo>
+    <template id="home_template" name="Home Page" inherit_id="website.homepage">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap">
+                <section class="homepage-section">
+                    <h1>Welcome to new</h1>
+                    <p>Plan your tri with ease an conveni.</p>
+<!--                    <a href="/travel/booking" class="btn btn-primary">Start Booking</a>-->
+                </section>
+            </div>
+        </xpath>
+    </template>
+</odoo>

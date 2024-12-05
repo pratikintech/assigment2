@@ -10,9 +10,10 @@
     'website': "https://www.paresh.com",
     'category': 'Uncategorized',
     'version': '0.1',
-    'depends': ['base','product','account'],
+    'depends': ['base','product','account','website'],
     'data': [
         'security/ir.model.access.csv',
+        'views/menu.xml',
         'views/flight_registry.xml',
         'views/flight_schedule.xml',
         'views/flight_booking.xml',
@@ -21,8 +22,10 @@
         'views/hotel_booking.xml',
         'views/booking_record.xml',
         'views/booking_location.xml',
-        'views/menu.xml',
+        'views/home_page.xml',
+        'views/flight_templates.xml',
     ],
+
     # 'demo': [
     #     'demo/demo.xml',
     # ],
