@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--    tree view  started-->
+    <record model="ir.ui.view" id="view_model_booking_location_tree">
+        <field name="name">booking.location.tree</field>
+        <field name="model">booking.location</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Name" widget="badge"/>
+                <field name="location_type" string="Location Type"/>
+                <field name="address_id" string="Address id" widget="many2one"/>
+                <field name="latitude" string="Latitude"/>
+                <field name="longitude" string="Longitude"/>
+                <field name="contact_number" string="Contact NO"/>
+                <field name="time_zone" string="Time zone"/>
+                <field name="email_address" string="Email" widget="email"/>
+            </tree>
+        </field>
+    </record>
+    <!--tree view ended here-->
+    <!--    form view started here-->
+    <record model="ir.ui.view" id="view_model_booking_location_form">
+        <field name="name">booking.location.form</field>
+        <field name="model">booking.location</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="location_type"/>
+                            <field name="address_id"/>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                        </group>
+                        <group>
+                            <field name="time_zone"/>
+                            <field name="contact_number"/>
+                            <field name="email_address"/>
+                            <field name="description"/>
+                            <field name="accessibility_details"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--form view ended here-->
+    <!--    search view start here-->
+    <record model="ir.ui.view" id="view_model_booking_location_search">
+        <field name="name">booking.location.search</field>
+        <field name="model">booking.location</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Booking Location"
+                       filter_domain="['|', ('name','ilike',self), ('address_id','ilike',self) ]"/>
+            </search>
+        </field>
+    </record>
+    <!--    search view ends here-->
+    <!--window action started-->
+    <record id="action_booking_location" model="ir.actions.act_window">
+        <field name="name">booking location</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">booking.location</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_noncontent_smiling_face">
+                Booking records !
+            </p>
+
+        </field>
+    </record>
+    <!--window action complete-->
+    <menuitem id="menu_travel_service_booking_location"
+              name="Booking location"
+              parent="menu_travel_service_booking_root"
+              action="action_booking_location"
+              sequence="0"/>
+
+</odoo>

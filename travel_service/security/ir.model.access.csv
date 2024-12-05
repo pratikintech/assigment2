@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_travel_service_travel_ser,travel_service.travel_ser,travel_service.model_travel_ser,base.group_user,1,1,1,1
+access_travel_service_flight_registry,travel_service.flight_registry,travel_service.model_flight_registry,base.group_user,1,1,1,1
+access_travel_service_flight_schedule,travel_service.flight_schedule,travel_service.model_flight_schedule,base.group_user,1,1,1,1
+access_travel_service_flight_booking,travel_service.flight_booking,travel_service.model_flight_booking,base.group_user,1,1,1,1
+access_travel_service_hotel_registry,travel_service.hotel_registry,travel_service.model_hotel_registry,base.group_user,1,1,1,1
+access_travel_service_hotel_room,travel_service.hotel_room,travel_service.model_hotel_room,base.group_user,1,1,1,1
+access_travel_service_hotel_booking,travel_service.hotel_booking,travel_service.model_hotel_booking,base.group_user,1,1,1,1
+access_travel_service_booking_record,travel_service.booking_record,travel_service.model_booking_record,base.group_user,1,1,1,1
+access_travel_service_booking_location,travel_service.booking_location,travel_service.model_booking_location,base.group_user,1,1,1,1

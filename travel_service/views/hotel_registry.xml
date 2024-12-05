@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <!--    tree view  started-->
+    <record model="ir.ui.view" id="view_model_hotel_registry_tree">
+        <field name="name">hotel.registry.tree</field>
+        <field name="model">hotel.registry</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="hotel_code" string="Hotel Code" />
+                <field name="hotel_name" string="Hotel Name" widget="badge"/>
+                <field name="hotel_address" string="Address"/>
+                <field name="contact_number" string="Contact NO" />
+                <field name="hotel_rating" string="Rating" widget="badge"/>
+                <field name="number_of_rooms" string="Available Rooms"/>
+            </tree>
+        </field>
+    </record>
+    <!--tree view ended here-->
+ <!--    form view started here-->
+    <record model="ir.ui.view" id="view_model_hotel_registry_form">
+        <field name="name">hotel.registry.form</field>
+        <field name="model">hotel.registry</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="hotel_code"/>
+                            <field name="hotel_name"/>
+                            <field name="hotel_address"/>
+                            <field name="contact_number"/>
+                            <field name="email_address"/>
+                             <field name="hotel_rating" widget="priority" options="{'clickable': True, 'number_of_stars': 5}"/>
+                        </group>
+                        <group>
+                            <field name="number_of_rooms"/>
+                            <field name="facilities"/>
+                            <field name="check_in_time"/>
+                            <field name="check_out_time"/>
+                            <field name="cancellation_policy"/>
+                            <field name="hotel_room_ids"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--form view ended here-->
+  <!--    search view start here-->
+    <record model="ir.ui.view" id="view_model_hotel_registry_search">
+        <field name="name">hotel.registry.search</field>
+        <field name="model">hotel.registry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="hotel_name" string="Hotel"
+                       filter_domain="['|', ('hotel_name','ilike',self), ('hotel_address','ilike',self) ]"/>
+                <field name="hotel_rating" string="Rating"/>
+            </search>
+        </field>
+    </record>
+<!--    search view ends here-->
+    <!--window action started-->
+    <record id="action_hotel_registry" model="ir.actions.act_window">
+        <field name="name">Hotel Registry</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hotel.registry</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_noncontent_smiling_face">
+                Register Your Hotel   !
+            </p>
+        </field>
+    </record>
+<!--    window action ended-->
+<menuitem id="menu_travel_service_hotel_master"
+              name="Hotel registry"
+              parent="menu_travel_service_hotel_root"
+              action="action_hotel_registry"
+              sequence="0"/>
+</odoo>

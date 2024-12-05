@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_travel_service_root"
+              name="Travel service"
+              web_icon="travel_service,static/description/icon.png"
+              sequence="0"/>
+
+     <menuitem id="menu_travel_service_flight_root"
+               name="Flight"
+               parent="menu_travel_service_root"
+               sequence="0"/>
+
+    <menuitem id="menu_travel_service_flight_booking"
+              name="flight booking"
+              parent="menu_travel_service_flight_root"
+              sequence="0"/>
+<!--    hotels menu start here-->
+
+    <menuitem id="menu_travel_service_hotel_root"
+               name="Hotels"
+               parent="menu_travel_service_root"
+               sequence="0"/>
+
+    <menuitem id="menu_travel_service_hotel_booking"
+              name="Hotel Booking"
+              parent="menu_travel_service_hotel_root"
+              sequence="0"/>
+
+    <menuitem id="menu_travel_service_hotel_room"
+              name="Hotel Room"
+              parent="menu_travel_service_hotel_root"
+              sequence="0"/>
+
+    <menuitem id="menu_travel_service_booking_root"
+               name="Bookings"
+               parent="menu_travel_service_root"
+               sequence="0"/>
+
+</odoo>

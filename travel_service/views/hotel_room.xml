@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--         tree view  started-->
+    <record model="ir.ui.view" id="view_model_hotel_room_tree">
+        <field name="name">hotel.room.tree</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Name" widget="badge"/>
+                <field name="hotel_id" string="Hotel id"/>
+                <field name="room_type" string="Room Type" widget="badge"/>
+                <field name="price_per_night" string="price/night" />
+                <field name="bed_type" string="Bed Type"/>
+                <field name="feature_ids" string="Feature" widget="many2many_tags"/>
+                <field name="smoking_allowed" string="smoking allowance"/>
+                <field name="currency_id" string="currency"/>
+            </tree>
+        </field>
+    </record>
+<!--    tree view ended here-->
+<!--     form view started here-->
+    <record model="ir.ui.view" id="view_model_hotel_room_form">
+        <field name="name">hotel.room.form</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="hotel_id"/>
+                            <field name="room_type"/>
+                            <field name="feature_ids"/>
+                            <field name="price_per_night"/>
+                            <field name="floor_number"/>
+                            <field name="special_notes"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                            <field name="max_capacity"/>
+                            <field name="bed_type"/>
+                            <field name="currency_id"/>
+                            <field name="room_size"/>
+                            <field name="smoking_allowed"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--form view ended here-->
+    <!--window action started-->
+    <record id="action_hotel_room" model="ir.actions.act_window">
+        <field name="name">Hotel Room</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hotel.room</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_noncontent_smiling_face">
+                Hotel room !
+            </p>
+        </field>
+    </record>
+    <!--window action complete-->
+         <menuitem id="menu_travel_service_hotel_room"
+              name="Hotel Room"
+              parent="menu_travel_service_hotel_root"
+              action="action_hotel_room"
+              sequence="0"/>
+
+</odoo>

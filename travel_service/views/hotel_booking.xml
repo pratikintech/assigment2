@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--    tree view  started-->
+    <record model="ir.ui.view" id="view_model_hotel_booking_tree">
+        <field name="name">hotel.booking.tree</field>
+        <field name="model">hotel.booking</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="booking_id" string="Booking Id" widget="badge"/>
+                <field name="hotel_name" string="Hotel Name" widget="badge"/>
+
+                <field name="room_type" string="Type"/>
+                <field name="num_rooms" string="Rooms NO"/>
+                <field name="num_days" string="Days No"/>
+                <field name="guest_names" string="Guest's"/>
+                <field name="invoice_id" widget="many2one" readonly="1" options="{'no_create': True}"/>
+            </tree>
+        </field>
+    </record>
+    <!--tree view ended here-->
+    <!--    form view started here-->
+    <record model="ir.ui.view" id="view_model_hotel_booking_form">
+        <field name="name">hotel.booking.form</field>
+        <field name="model">hotel.booking</field>
+        <field name="arch" type="xml">
+            <form>
+                 <header>
+                        <!-- Booking State Buttons -->
+                        <button name="action_confirm_booking" type="object" string="Confirm" states="draft" class="btn-primary"/>
+                        <button name="action_cancel_booking" type="object" string="Cancel" states="draft,confirmed" class="btn-secondary"/>
+
+                        <!-- Invoice Buttons -->
+                        <button name="action_confirm_booking" type="object" string="Create Invoice" class="btn-primary"
+                                attrs="{'invisible': [('invoice_id', '!=', False)]}"/>
+                        <button name="action_view_invoice" type="object" string="View Invoice" class="btn-secondary"
+                                attrs="{'invisible': [('invoice_id', '=', False)]}"/>
+
+                        <!-- State Statusbar -->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,cancelled"/>
+                    </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="booking_id"/>
+                            <field name="customer_id"/>
+                            <field name="hotel_name"/>
+
+                            <field name="guest_names"/>
+                        </group>
+                        <group>
+                            <field name="room_type"/>
+                            <field name="num_rooms"/>
+                            <field name="num_days"/>
+                            <field name="total_cost"/>
+                            <field name="invoice_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--form view ended here-->
+    <!--    search view start here-->
+    <record model="ir.ui.view" id="view_model_hotel_booking_search">
+        <field name="name">hotel.booking.search</field>
+        <field name="model">hotel.booking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="hotel_name" string="Hotel"
+                       filter_domain="['|', ('hotel_name','ilike',self), ('booking_id','ilike',self) ]"/>
+            </search>
+        </field>
+    </record>
+    <!--    search view ends here-->
+    <!--window action started-->
+    <record id="action_hotel_booking" model="ir.actions.act_window">
+        <field name="name">Hotel Booking</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hotel.booking</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_noncontent_smiling_face">
+                Hotel Booking !
+            </p>
+        </field>
+    </record>
+    <!--window action complete-->
+    <menuitem id="menu_travel_service_hotel_booking"
+              name="Hotel Booking"
+              parent="menu_travel_service_hotel_root"
+              action="action_hotel_booking"
+              sequence="0"/>
+
+</odoo>
