@@ -84,3 +84,24 @@ class FlightBooking(models.Model):
             'target': 'current',
         }
 
+    def get_invoice_details(self):
+        """
+        Retrieve detailed invoice information for display
+        """
+        self.ensure_one()
+        if not self.invoice_id:
+            return {}
+
+        return {
+            'invoice_number': self.invoice_id.name,
+            'invoice_date': self.invoice_id.invoice_date,
+            'total_amount': self.invoice_id.amount_total,
+            'invoice_lines': [
+                {
+                    'name': line.name,
+                    'quantity': line.quantity,
+                    'price_unit': line.price_unit,
+                    'price_subtotal': line.price_subtotal,
+                } for line in self.invoice_id.invoice_line_ids
+            ]
+        }

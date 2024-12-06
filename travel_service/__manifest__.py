@@ -23,7 +23,7 @@
         'views/booking_record.xml',
         'views/booking_location.xml',
         'views/home_page.xml',
-        'views/flight_templates.xml',
+        'views/flight_booking_website_template.xml',
     ],
 
     # 'demo': [
