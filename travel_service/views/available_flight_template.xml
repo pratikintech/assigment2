@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="available_flight_template" name="Available Flight Search">
+        <t t-call="website.layout">
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Search Form -->
+                        <form method="GET" action="/flight/available" class="mb-4">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="departure_location">Departure Location</label>
+                                        <select name="departure_location" class="form-control">
+                                            <option value="">Select Departure Location</option>
+                                            <t t-foreach="departure_locations" t-as="location">
+                                                <option t-att-value="location.id" t-esc="location.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="arrival_location">Arrival Location</label>
+                                        <select name="arrival_location" class="form-control">
+                                            <option value="">Select Arrival Location</option>
+                                            <t t-foreach="destination_locations" t-as="location">
+                                                <option t-att-value="location.id" t-esc="location.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 align-self-end">
+                                    <button type="submit" class="btn btn-primary btn-block">Search Flights</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Flights Table -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Available Flights
+                                    <span class="badge bg-info float-end" t-esc="len(flight_schedules)"/>
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="flightsTable" class="table table-striped table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th onclick="sortTable(0)">Flight <i class="fas fa-sort"></i></th>
+                                                <th onclick="sortTable(1)">Airline <i class="fas fa-sort"></i></th>
+                                                <th onclick="sortTable(2)">Departure <i class="fas fa-sort"></i></th>
+                                                <th onclick="sortTable(3)">Arrival <i class="fas fa-sort"></i></th>
+                                                <th onclick="sortTable(4)">Duration <i class="fas fa-sort"></i></th>
+                                                <th onclick="sortTable(5)">Status <i class="fas fa-sort"></i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-if="not flight_schedules">
+                                                <tr>
+                                                    <td colspan="7" class="text-center text-muted">
+                                                        No flights available for the selected route.
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            <t t-foreach="flight_schedules" t-as="flight">
+                                                <tr>
+                                                    <td t-esc="flight.flight_name"/>
+                                                    <td t-esc="flight.airline_code"/>
+                                                    <td t-esc="flight.departure_date_time"/>
+                                                    <td t-esc="flight.arrival_date_time"/>
+                                                    <td t-esc="flight.flight_duration"/>
+                                                    <td>
+                                                        <span t-att-class="'badge ' + ('bg-success' if flight.status == 'confirmed' else 'bg-warning')" t-esc="flight.status"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Inline JavaScript for Table Sorting -->
+            <script type="text/javascript">
+            <![CDATA[
+                function sortTable(n) {
+                    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+                    table = document.getElementById("flightsTable");
+                    switching = true;
+                    dir = "asc";
+
+                    while (switching) {
+                        switching = false;
+                        rows = table.rows;
+
+                        for (i = 1; i < (rows.length - 1); i++) {
+                            shouldSwitch = false;
+                            x = rows[i].getElementsByTagName("TD")[n];
+                            y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                            if (dir == "asc") {
+                                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            } else if (dir == "desc") {
+                                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (shouldSwitch) {
+                            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                            switching = true;
+                            switchcount ++;
+                        } else {
+                            if (switchcount == 0 && dir == "asc") {
+                                dir = "desc";
+                                switching = true;
+                            }
+                        }
+                    }
+                }
+            ]]>
+            </script>
+            <!-- Add Font Awesome for sorting icons (optional) -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+        </t>
+    </template>
+</odoo>

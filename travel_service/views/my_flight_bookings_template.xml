@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <template id="my_flight_bookings_template" name="My Flight Bookings">
+        <t t-call="website.layout">
+            <div class="container mt-4">
+                <h1 class="text-center">My Flight Bookings</h1>
+                 <!-- Search Form -->
+                <form action="/flight/my_bookings" method="get" class="mb-4">
+                    <div class="input-group">
+                        <input type="text" name="search_query" class="form-control"
+                               placeholder="Search by Flight Name" t-att-value="search_query"/>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+<!--                search form ends here-->
+                <t t-if="bookings">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Flight Name</th>
+                                <th>Flight Number</th>
+                                <th>Class of Travel</th>
+                                <th>Number of Travelers</th>
+                                <th>Total cost</th>
+                                <th>State</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="bookings" t-as="booking">
+                                <tr>
+                                    <td><a t-att-href="'/flight/booking/detail/'+ str(booking.id)"><t t-esc="booking.flight_id.flight_name"/></a></td>
+                                    <td><t t-esc="booking.flight_id.flight_no"/></td>
+                                    <td><t t-esc="booking.class_of_travel"/></td>
+                                    <td><t t-esc="booking.num_traveler"/></td>
+                                    <td><t t-esc="booking.total_cost"/></td>
+                                    <td><t t-esc="booking.state"/></td>
+
+                                    <td>
+                                    <t t-if="booking.state in ['draft', 'confirmed']">
+                                        <a t-att-href="'/flight/booking/cancel/'+ str(booking.id)"
+                                           class="btn btn-sm btn-danger"
+                                           onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                            Cancel Booking
+                                        </a>
+                                    </t>
+                                </td>
+
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+                <t t-else="">
+                    <p class="text-warning">You have no bookings yet.</p>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

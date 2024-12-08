@@ -22,8 +22,10 @@
         'views/hotel_booking.xml',
         'views/booking_record.xml',
         'views/booking_location.xml',
-        'views/home_page.xml',
+        'views/home_template.xml',
         'views/flight_booking_website_template.xml',
+        'views/my_flight_bookings_template.xml',
+        'views/available_flight_template.xml',
     ],
 
     # 'demo': [

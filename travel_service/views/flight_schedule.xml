@@ -14,6 +14,7 @@
                 <field name="departure_date_time" string="Departure" />
                 <field name="arrival_date_time" string="Arrival"/>
                 <field name="status" string="status"/>
+                <field name="status" string="is_available"/>
             </tree>
         </field>
     </record>
@@ -34,6 +35,7 @@
                             <field name="departure_date_time"/>
                             <field name="arrival_date_time"/>
                             <field name="status"/>
+                            <field name="is_available"/>
                         </group>
                         <group>
                             <field name="flight_duration"/>

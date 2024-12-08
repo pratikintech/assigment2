@@ -30,6 +30,23 @@ class FlightSchedule(models.Model):
         ('cancelled', 'Cancelled'),
         ('completed', 'Completed')
     ], string='Flight Status', default='scheduled')
+    is_available = fields.Boolean(string='Available', compute="_compute_is_available", store=True)
+
+    @api.model
+    def name_get(self):
+        result = []
+        for record in self:
+            name = f"(origin location: {record.origin_airport_id},(origin location: {record.destination_airport_id}  )"
+            result.append((record.id, name))
+        return result
+
+    @api.depends('departure_date_time', 'arrival_date_time', 'status', 'origin_airport_id', 'destination_airport_id')
+    def _compute_is_available(self):
+        for record in self:
+            record.is_available = (record.status == 'scheduled'
+                                   and record.departure_date_time > fields.Datetime.now()
+                                   and record.origin_airport_id
+                                   and record.destination_airport_id)
 
     @api.depends('departure_date_time', 'arrival_date_time')
     def _compute_flight_duration(self):

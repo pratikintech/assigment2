@@ -1,114 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
+
     <template id="flight_booking_website_template" name="Flight Booking Page">
         <t t-call="website.layout">
+
             <div class="container mt-4">
-                <h1>Flight Booking</h1>
+                <h1 class="text-center">Flight Booking</h1>
                 <form action="/flight/booking" method="POST">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
-                    <div class="form-group">
-                        <label>Select Flight</label>
-                        <select name="flight_id" class="form-control" required="required">
+                    <div class="form-group" style="padding:10px; margin-bottom:5px">
+                        <label for="flightSelect">
+                            <i class="fas fa-plane-departure">Select Flight</i>
+                        </label>
+                        <select id="flightSelect" name="flight_id" class="form-control" required="required">
                             <option value="">Select a Flight</option>
                             <t t-foreach="flight_registry" t-as="flight">
-                                <option t-att-value="flight.id">
-                                    <t t-esc="flight.flight_name"/> -
-                                    <t t-esc="flight.flight_no"/> -
+                                <option t-att-value="flight.id" t-att-data-schedules="flight.flight_schedule_ids">
+                                    <t t-esc="flight.flight_name"/>
+                                    -
+                                    <t t-esc="flight.flight_no"/>
+                                    -
                                     <t t-esc="flight.airline_code"/>
                                 </option>
                             </t>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label>Class of Travel</label>
+                    <div class="form-group" style="padding:10px; margin-bottom:5px">
+                        <label>Departure Location</label>
+                        <select name="departure_location" class="form-control" required="required">
+                            <t t-foreach="departure_locations" t-as="location">
+                                <option t-att-value="location.id">
+                                    <t t-esc="location.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="padding:10px; margin-bottom:5px">
+                        <label>Arrival Location</label>
+                        <select name="arrival_location" class="form-control" required="required">
+                            <t t-foreach="destination_locations" t-as="location">
+                                <option t-att-value="location.id">
+                                    <t t-esc="location.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="padding:10px; margin-bottom:5px">
+                        <label for="classSelect">
+                            <i class="fas fa-suitcase">Class of Travel</i>
+                        </label>
                         <select name="class_of_travel" class="form-control" required="required">
                             <option value="economy">Economy</option>
                             <option value="business">Business</option>
                         </select>
+                        <p>For Economy price per person:1000</p>
+                        <p>For Business price per person:2500</p>
                     </div>
 
-                    <div class="form-group">
-                        <label>Number of Travelers</label>
+                    <div class="form-group" style="padding:10px; margin-bottom:5px">
+                        <label for="numTraveler">
+                            <i class="fas fa-user-friends">Number of Travelers</i>
+                        </label>
                         <input type="number" name="num_traveler" class="form-control"
-                               min="1" max="10" value="1" required="required"/>
+                               min="1" max="50" value="1" required="required"/>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Book Flight</button>
+                    <button type="submit" class="btn btn-primary" style="padding:10px; margin-bottom:10px">Book Flight
+                    </button>
                 </form>
             </div>
         </t>
     </template>
+
     <template id="flight_booking_success" name="Flight Booking Success">
-    <t t-call="website.layout">
-        <div class="container mt-4">
-            <div class="alert alert-success">
-                <h2>Booking Successful!</h2>
-                <p>Your flight has been booked.</p>
-                <p>Booking Details:</p>
-                <ul>
-                    <li>Flight: <t t-esc="booking.flight_id.flight_name"/></li>
-                    <li>Flight Number: <t t-esc="booking.flight_id.flight_no"/></li>
-                    <li>Airline Code: <t t-esc="booking.flight_id.airline_code"/></li>
-                    <li>Class: <t t-esc="booking.class_of_travel"/></li>
-                    <li>Total Cost: <t t-esc="booking.total_cost"/></li>
+        <t t-call="website.layout">
+            <div class="container mt-4">
+                <div class="alert alert-success">
+                    <h2>Booking Successful!</h2>
+                    <p>Your flight has been booked successfully. Here are your booking details:</p>
 
-<!--                    <li>invoice: <t t-esc="booking.invoice_id"/></li>-->
-                    <li>Customer: <t t-esc="booking.invoice_id.partner_id.name"/></li>
-
-                    <div class="col-md-6">
+                    <h4>Flight Information</h4>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">
+                            <strong>Flight:</strong>
+                            <t t-esc="booking.flight_id.flight_name"/>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Flight Number:</strong>
+                            <t t-esc="booking.flight_id.flight_no"/>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Airline Code:</strong>
+                            <t t-esc="booking.flight_id.airline_code"/>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Class:</strong>
+                            <t t-esc="booking.class_of_travel"/>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Total Cost:</strong>
+                            $
+                            <t t-esc="booking.total_cost"/>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Customer:</strong>
+                            <t t-esc="booking.invoice_id.partner_id.name"/>
+                        </li>
+                    </ul>
+                    <div class="">
                         <t t-set="invoice_details" t-value="booking.get_invoice_details()"/>
                         <h4>Invoice Details</h4>
+
+
                         <t t-if="invoice_details">
-                            <ul>
-                                <li>Total Amount: <t t-esc="invoice_details['total_amount']"/></li>
+                            <ul class="">
+                                <li>
+                                    <strong>Total Amount:</strong>
+                                    $
+                                    <t t-esc="booking.total_cost"/>
+                                </li>
                             </ul>
 
+                            <!-- Invoice Lines Table -->
                             <h5>Invoice Lines</h5>
-                            <table class="table">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Description</th>
-                                        <th>Quantity</th>
-                                        <th>Unit Price</th>
-                                        <th>Subtotal</th>
+                                        <th>No of Traveller</th>
+                                        <th>Total Price</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <t t-foreach="invoice_details['invoice_lines']" t-as="line">
                                         <tr>
-                                            <td><t t-esc="line['name']"/></td>
-                                            <td><t t-esc="line['quantity']"/></td>
-                                            <td><t t-esc="line['price_unit']"/></td>
-                                            <td><t t-esc="line['price_subtotal']"/></td>
+                                            <td>
+                                                <t t-esc="line['name']"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line['quantity']"/>
+                                            </td>
+                                            <td>$
+                                                <t t-esc="(line['price_unit'])"/>
+                                            </td>
+
                                         </tr>
                                     </t>
                                 </tbody>
                             </table>
+
+
                         </t>
                         <t t-else="">
-                            <p class="text-warning">No invoice generated</p>
+                            <p class='text-warning'>No invoice generated.</p>
                         </t>
                     </div>
 
-                </ul>
+
+                </div>
             </div>
-        </div>
-    </t>
-</template>
+        </t>
+    </template>
+
 
     <template id="booking_error_template" name="Booking Error">
-    <t t-call="website.layout">
-        <div class="container mt-4">
-            <div class="alert alert-danger">
-                <h2>Booking Error</h2>
-                <p>An error occurred while processing your booking:</p>
-                <p t-esc="error"/>
+        <t t-call="website.layout">
+            <div class="container mt-4">
+                <div class="alert alert-danger">
+                    <h2>Booking Error</h2>
+                    <p>An error occurred while processing your booking:</p>
+                    <p t-esc="error"/>
+                </div>
             </div>
-        </div>
-    </t>
-</template>
+        </t>
+    </template>
 
 </odoo>
