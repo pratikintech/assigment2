@@ -45,6 +45,8 @@
                             <field name="booking_id"/>
                             <field name="customer_id"/>
                             <field name="hotel_name"/>
+                            <field name="check_in_date"/>
+                            <field name="check_out_date"/>
 
                             <field name="guest_names"/>
                         </group>

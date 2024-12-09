@@ -1,0 +1,49 @@
+<odoo>
+    <template id="hotel_booking_details_template" name="My Hotel Bookings">
+        <t t-call="website.layout">
+            <div class="container mt16 mb16">
+                <h1>Your Hotel Bookings</h1>
+                <t t-if="bookings">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Hotel Name</th>
+                                <th>Room Type</th>
+                                <th>Check-in Date</th>
+                                <th>Check-out Date</th>
+                                <th>Number of Rooms</th>
+                                <th>Number of Guests</th>
+                                <th>state</th>
+                                <th>cancel</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="bookings" t-as="booking">
+                                <tr>
+                                    <td><t t-esc="booking.hotel_name"/></td>
+                                    <td><t t-esc="booking.room_type"/></td>
+                                    <td><t t-esc="booking.check_in_date"/></td>
+                                    <td><t t-esc="booking.check_out_date"/></td>
+                                    <td><t t-esc="booking.num_rooms"/></td>
+                                    <td><t t-esc="booking.num_guests"/></td>
+                                    <td><t t-esc="booking.state"/></td>
+                                    <td>
+                                        <t t-if="booking.state in ['draft', 'confirmed']">
+                                        <a t-att-href="'/hotel/booking/cancel/' + str(booking.id)" class="btn btn-danger">Cancel Booking</a>
+                                    </t>
+                                    </td>
+
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+                <t t-else="">
+                    <p>No bookings found.</p>
+                </t>
+                <a href="/hotel/booking" class="btn btn-primary">Back to Booking</a>
+            </div>
+        </t>
+    </template>
+</odoo>

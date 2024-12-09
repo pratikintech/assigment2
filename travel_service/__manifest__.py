@@ -26,6 +26,8 @@
         'views/flight_booking_website_template.xml',
         'views/my_flight_bookings_template.xml',
         'views/available_flight_template.xml',
+        'views/hotel_booking_website_template.xml',
+        'views/my_hotel_booking.xml',
     ],
 
     # 'demo': [

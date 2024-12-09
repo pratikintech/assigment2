@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Hotel Booking Page Template -->
+    <template id="hotel_booking_website_template" name="Hotel Booking Page">
+        <t t-call="website.layout">
+            <div class="container py-5">
+                <div class="text-center mb-5">
+                    <h1 class="display-4">Hotel Booking</h1>
+                    <p class="text-muted">Plan your perfect stay with ease.</p>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <form action="/hotel/booking/submit" method="POST" class="p-4 border rounded shadow">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                            <div class="form-group mb-4">
+                                <label for="customer_id" class="form-label">Customer</label>
+                                <input id="customer_id" name="customer_id" class="form-control" required="required"
+                                       placeholder="Type customer name or select below" list="customer_list" />
+                                <datalist id="customer_list">
+                                    <t t-foreach="request.env['res.partner'].sudo().search([])" t-as="customer">
+                                        <option t-att-value="customer.name"/>
+                                    </t>
+                                </datalist>
+                            </div>
+
+
+
+                            <div class="form-group mb-4">
+                                <label for="hotel_id" class="form-label">Select Hotel</label>
+                                <select id="hotel_id" name="hotel_id" class="form-select" required="required">
+                                    <option value="">Select a Hotel</option>
+                                    <t t-foreach="hotels" t-as="hotel">
+                                        <option t-att-value="hotel.id">
+                                            <t t-esc="hotel.hotel_name"/> - <t t-esc="hotel.hotel_rating"/> Stars
+                                            (<t t-esc="hotel.cancellation_policy"/> Cancellation)
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="room_type" class="form-label">Select Room Type</label>
+                                <select id="room_type" name="room_type" class="form-select" required="required">
+                                    <option value="">Select a Room Type</option>
+                                    <t t-foreach="room_types" t-as="room_type">
+                                        <option t-att-value="room_type">
+                                            <t t-esc="room_type"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="check_in_date" class="form-label">Check-in Date</label>
+                                <input id="check_in_date" type="date" name="check_in_date" class="form-control" required="required"/>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="check_out_date" class="form-label">Check-out Date</label>
+                                <input id="check_out_date" type="date" name="check_out_date" class="form-control" required="required"/>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="num_rooms" class="form-label">Number of Rooms</label>
+                                <input id="num_rooms" type="number" name="num_rooms" class="form-control" min="1" max="10" required="required"/>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="num_guests" class="form-label">Number of Guests</label>
+                                <input id="num_guests" type="number" name="num_guests" class="form-control" min="1" max="20" required="required"/>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Book Hotel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Hotel Booking Success Template -->
+    <template id="hotel_booking_success" name="Hotel Booking Success">
+        <t t-call="website.layout">
+            <div class="container py-5">
+                <div class="text-center mb-4">
+                    <div class="alert alert-success">
+                        <h2>Booking Successful!</h2>
+                        <p class="mb-0">Here are your booking details:</p>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <ul class="list-group">
+                            <li class="list-group-item"><strong>Hotel:</strong> <t t-esc="hotel_name"/></li>
+<!--                            <li class="list-group-item"><strong>Customer:</strong> <t t-esc="booking.customer_id.name"/></li>-->
+                            <li class="list-group-item"><strong>Room Type:</strong> <t t-esc="booking.room_type"/></li>
+                            <li class="list-group-item"><strong>Check-in Date:</strong> <t t-esc="booking.check_in_date"/></li>
+                            <li class="list-group-item"><strong>Check-out Date:</strong> <t t-esc="booking.check_out_date"/></li>
+                            <li class="list-group-item"><strong>Rooms:</strong> <t t-esc="booking.num_rooms"/></li>
+                            <li class="list-group-item"><strong>Guests:</strong> <t t-esc="booking.num_guests"/></li>
+                            <li class="list-group-item"><strong>Total Cost:</strong> $<t t-esc="booking.total_cost"/></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Hotel Booking Error Template -->
+    <template id="hotel_booking_error_template" name="Hotel Booking Error">
+        <t t-call="website.layout">
+            <div class="container py-5">
+                <div class="text-center">
+                    <div class="alert alert-danger">
+                        <h2>Booking Error</h2>
+                        <p>We encountered an issue with your booking:</p>
+                        <p class="text-danger"><t t-esc="error"/></p>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

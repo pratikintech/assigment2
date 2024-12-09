@@ -170,10 +170,8 @@ class FlightBookingController(http.Controller):
                 ('id', '=', booking_id),
                 ('customer_id', '=', request.env.user.partner_id.id)
             ],limit=1)
-            print("bookgin: ",booking)
+            print("booking: ",booking)
             print("booking.state: ",booking.state)
-
-
 
             if not booking:
                 return request.render('travel_service.booking_error_template', {
@@ -196,4 +194,3 @@ class FlightBookingController(http.Controller):
             return request.render('travel_service.booking_error_template', {
                 'error': str(e)
             })
-

@@ -5,14 +5,10 @@ class HotelBooking(models.Model):
     _name = 'hotel.booking'
     _description = 'Hotel Booking'
 
-    booking_id = fields.Many2one('booking.record', string='Booking', required=True,domain="[('booking_type', '=', 'hotel')]")
+    booking_id = fields.Many2one('booking.record', string='Booking', domain="[('booking_type', '=', 'hotel')]")
     customer_id = fields.Many2one('res.partner', string='Customer', required=True)
     hotel_id = fields.Many2one('hotel.registry', string='Hotel id')
-    hotel_name = fields.Char(
-        string='Hotel Name',
-        compute='_compute_hotel_name',
-        store=True
-    )
+    hotel_name = fields.Char(string='Hotel Name')
     room_type = fields.Selection([
         ('single', 'Single'),
         ('double', 'Double'),
@@ -25,11 +21,17 @@ class HotelBooking(models.Model):
     ], string='Status', default='draft', required=True)
     num_rooms = fields.Integer(string='Number of Rooms')
     room_cost = fields.Float(string='Room Cost', compute='_compute_room_cost', store=True)
-    num_days = fields.Integer(string='Number of Days')
+    num_days = fields.Integer(
+        string='Number of Days',
+        compute='_compute_num_days',
+        store=True
+    )
     guest_names = fields.Text(string='Guest Names', help='Comma-separated names for multiple guests')
     total_cost = fields.Float(string='Total Cost', compute='_compute_total_cost', store=True)
     invoice_id = fields.Many2one('account.move', string='Invoice', readonly=True)
-
+    check_in_date = fields.Date(string='Check-in Date', required=True)
+    check_out_date = fields.Date(string='Check-out Date', required=True)
+    num_guests = fields.Integer(string='Number of Guests')  # Add this line if required
     @api.model
     def name_get(self):
         result = []
@@ -37,6 +39,14 @@ class HotelBooking(models.Model):
             name = f"[{record.booking_id}] {record.hotel_name} (Hotel Name: {record.hotel_name})"
             result.append((record.id, name))
         return result
+
+    @api.depends('check_in_date', 'check_out_date')
+    def _compute_num_days(self):
+        for record in self:
+            if record.check_in_date and record.check_out_date:
+                record.num_days = (record.check_out_date - record.check_in_date).days
+            else:
+                record.num_days = 0
 
     @api.depends('room_type')
     def _compute_room_cost(self):
@@ -55,6 +65,7 @@ class HotelBooking(models.Model):
         for record in self:
             if record.num_rooms > 0 and record.num_days > 0:
                 record.total_cost = record.num_rooms * record.num_days * record.room_cost
+                print(record.total_cost,"cost --------------------------")
             else:
                 record.total_cost = 0
 
@@ -75,7 +86,7 @@ class HotelBooking(models.Model):
                 }
                 invoice = self.env['account.move'].create(invoice_vals)
                 record.invoice_id = invoice.id
-            record.state = 'confirmed'
+                record.state = 'confirmed'
 
     def action_cancel_booking(self):
         """Cancel the booking."""
@@ -107,3 +118,8 @@ class HotelBooking(models.Model):
                     record.hotel_name = False
             else:
                 record.hotel_name = False
+
+    @api.depends('hotel_id')
+    def _compute_hotel_name(self):
+        for record in self:
+            record.hotel_name = record.hotel_id.name if record.hotel_id else ''

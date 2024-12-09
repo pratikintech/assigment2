@@ -9,7 +9,7 @@ class BookingRecord(models.Model):
     _name = 'booking.record'
     _description = 'Booking Record'
 
-    booking_id = fields.Char(string='Booking ID', required=True, copy=False,
+    booking_id = fields.Char(string='Booking ID', copy=False,
                              default=lambda self: self.env['ir.sequence'].next_by_code('booking.record'))
     customer_id = fields.Many2one('res.partner', string='Customer', required=True)
     booking_type = fields.Selection([

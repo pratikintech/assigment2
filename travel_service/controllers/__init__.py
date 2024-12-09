@@ -3,4 +3,4 @@
 # from . import  controllers
 from . import flight_booking_controller
 from . import travel_booking_controller
-# from . import flight_registry_website
+from . import hotel_booking_controller

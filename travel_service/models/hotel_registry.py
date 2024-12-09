@@ -1,8 +1,6 @@
 from odoo import api, fields, models, _
-from datetime import date
-from odoo.exceptions import ValidationError, UserError
+from odoo.exceptions import ValidationError,UserError
 import re
-
 
 class HotelRegistry(models.Model):
     _name = 'hotel.registry'
@@ -28,14 +26,14 @@ class HotelRegistry(models.Model):
     cancellation_policy = fields.Text(string='Cancellation Policy',
                                       default='Free cancellation up to 24 hours before check-in')
     hotel_room_ids = fields.One2many('hotel.room', 'hotel_id', string='Hotel Rooms')
-
-    @api.model
-    def name_get(self):
-        result = []
-        for record in self:
-            name = f"[{record.hotel_code}] {record.hotel_name} (Hotel Name: {record.hotel_name})"
-            result.append((record.id, name))
-        return result
+    price_per_night = fields.Float(string='Price per Night')
+    # @api.model
+    # def name_get(self):
+    #     result = []
+    #     for record in self:
+    #         name = f"[{record.hotel_code}] {record.hotel_name} (Hotel Name: {record.hotel_name})"
+    #         result.append((record.id, name))
+    #     return result
 
     @api.constrains('contact_number')
     def _check_phone_number(self):
